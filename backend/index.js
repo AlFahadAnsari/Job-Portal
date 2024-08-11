@@ -3,14 +3,15 @@ import cookieParser from "cookie-parser"
 import cors from "cors"
 import dotenv from "dotenv"
 import ConnectDb from "./utils/db.js"
+import UserRouter from "../backend/routes/user.routes.js"
 dotenv.config({})
 
 const Port = 8080
 const app = express()
 
-app.get("/home",(req,res)=>{
-    res.send("hii alfahad")
-})
+// app.get("/home",(req,res)=>{
+//     res.send("hii alfahad")
+// })
 
 
 app.use(express.json())
@@ -24,6 +25,8 @@ const corsOptions={
 app.use(cors(corsOptions))
 
 
+
+app.use("/api/user/" , UserRouter)
 
 
 app.listen(Port ,()=>{
