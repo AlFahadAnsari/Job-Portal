@@ -10,7 +10,7 @@ const router = express.Router();
 
 router.route("/register").post(register);
 router.route("/login").post(login);
-router.route("/profile/update").post(userMiddleware, UpdateProfile);
+router.route("/profile/update").get(userMiddleware, UpdateProfile);
 router.route("/logout").post(logout)
 
 export default router;
