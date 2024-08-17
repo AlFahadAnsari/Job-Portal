@@ -3,14 +3,15 @@ import {
   login,
   logout,
   register,
-  UpdateProfile,
+  updateProfile,
 } from "../controller/user.controller.js";
 import userMiddleware from "../middleware/user.middle.js";
+import { SignleUplaod } from "../middleware/multer.js";
 const router = express.Router();
 
-router.route("/register").post(register);
+router.route("/register").post(SignleUplaod , register);
 router.route("/login").post(login);
-router.route("/profile/update").get(userMiddleware, UpdateProfile);
+router.route("/profile/update").get(userMiddleware, updateProfile);
 router.route("/logout").post(logout)
 
 export default router;

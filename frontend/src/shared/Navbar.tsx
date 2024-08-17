@@ -5,13 +5,13 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { LogOut, User2 } from "lucide-react";
+import { Cookie, LogOut, User2 } from "lucide-react";
 import { Link } from "react-router-dom";
 
 const Navbar = () => {
   // const [user , setUser] = useState(true)
 
-  const user = false;
+  const user = false
   return (
     <>
       <div className="flex justify-between h-16 mx-auto max-w-7xl items-center">

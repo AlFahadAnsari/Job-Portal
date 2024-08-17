@@ -13,18 +13,15 @@ dotenv.config({});
 const Port = 8080;
 const app = express();
 
-// app.get("/home",(req,res)=>{
-//     res.send("hii alfahad")
-// })
-
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 const corsOptions = {
-  origin: "http//localhost/5173",
+  origin: "http://localhost:5173",  // Fixed typo here
   credentials: true,
 };
+
 app.use(cors(corsOptions));
 
 app.use("/api/user/", UserRouter);
@@ -34,5 +31,5 @@ app.use("/api/application/", applicationRouter);
 
 app.listen(Port, () => {
   ConnectDb();
-  console.log(`server runing on ${Port}`);
+  console.log(`Server running on ${Port}`);
 });
