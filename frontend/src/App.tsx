@@ -1,9 +1,9 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "./App.css";
-import Navbar from "./shared/Navbar";
 import Home from "./components/Home";
 import Login from "./components/auth/Login";
 import Signup from "./components/auth/Signup";
+import Job from "./components/MultiJob";
 
 function App() {
   const appRouter = createBrowserRouter([
@@ -16,8 +16,12 @@ function App() {
       element: <Login />,
     },
     {
-      path: "signup",
+      path: "/signup",
       element: <Signup />,
+    },
+    {
+      path: "/jobs",
+      element: <Job />,
     },
   ]);
 
