@@ -4,39 +4,36 @@ import { RadioGroup, RadioGroupItem } from "./ui/radio-group";
 const FilterData = [
   {
     filterType: "Location",
-    array: ["mumbai", "thane", "virar", "vasai"],
+    options: ["Mumbai", "Thane", "Virar", "Vasai"],
   },
   {
     filterType: "Industry",
-    array: ["Front-end developer", "Back-end developer", "Fullstack developer"],
+    options: ["Front-end developer", "Back-end developer", "Fullstack developer"],
   },
   {
     filterType: "Salary",
-    array: ["0-40k", "42k - 1lk", "1lak-5lak"],
+    options: ["0-40k", "42k - 1lk", "1lk-5lk"],
   },
 ];
 
 const FilterCards = () => {
   return (
-    <div>
+    <div className="w-full">
       <h1>Filter Jobs</h1>
       <hr className="mt-3" />
-      <RadioGroup>
-        {FilterData.map((data, index) => (
-          <div key={index}>
-            <h1>{data.filterType}</h1>
-            {data.array.map((option, optionIndex) => {
-              return (
-                <div key={optionIndex}>
-                  <RadioGroupItem value={option}>
-                    <Label className="p-10">{option}</Label>
-                  </RadioGroupItem>
-                </div>
-              );
-            })}
-          </div>
-        ))}
-      </RadioGroup>
+      {FilterData.map((data, index) => (
+        <div key={index}>
+          <h2 className="mt-4 font-bold">{data.filterType}</h2>
+          <RadioGroup>
+            {data.options.map((option, optionIndex) => (
+              <div key={optionIndex} className="flex items-center space-x-3 mt-2">
+                <RadioGroupItem value={option}/>
+                <Label className="text-gray-500">{option}</Label>
+              </div>
+            ))}
+          </RadioGroup>
+        </div>
+      ))}
     </div>
   );
 };

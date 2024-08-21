@@ -1,3 +1,4 @@
+import { BASE_URL } from "@/components/constant";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
@@ -5,11 +6,30 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import {  LogOut, User2 } from "lucide-react";
-import { Link } from "react-router-dom";
+import { RootState } from "@/redux/store";
+import axios from "axios";
+import { LogOut, User2 } from "lucide-react";
+import toast from "react-hot-toast";
+import { useSelector } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
 
 const Navbar = () => {
-  const user = false;
+  const navi = useNavigate();
+
+  const handleLogout = async () => {
+    try {
+      const res = await axios.post(BASE_URL + "/api/user/logout");
+      if (res.status == 200) {
+        toast.success(res.data.message);
+        navi("/login");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const { user } = useSelector((state: RootState) => state.auth);
+
   return (
     <div className="w-full bg-white shadow-sm">
       <div className="flex justify-between h-16 mx-auto max-w-7xl items-center px-4 sm:px-6 lg:px-8">
@@ -23,9 +43,15 @@ const Navbar = () => {
 
         <div className="flex font-medium items-center gap-5">
           <ul className="hidden sm:flex gap-5">
-            <li><Link to={"/"}>Home</Link></li>
-            <li><Link to={"/jobs"}>Jobs</Link></li>
-            <li><Link to={"/browesr"}>Browesr</Link></li>
+            <li>
+              <Link to={"/"}>Home</Link>
+            </li>
+            <li>
+              <Link to={"/jobs"}>Jobs</Link>
+            </li>
+            <li>
+              <Link to={"/browsejob"}>Browes</Link>
+            </li>
           </ul>
           {!user ? (
             <div className="flex gap-2 sm:gap-4">
@@ -73,13 +99,17 @@ const Navbar = () => {
                     <div className="flex gap-2 sm:gap-4 items-center">
                       <User2 className="w-4 h-4 sm:w-5 sm:h-5" />
                       <Button variant="link" className="text-sm sm:text-base">
-                        View Profile
+                        <Link to={"/profile/update"}> View Profile</Link>
                       </Button>
                     </div>
 
                     <div className="flex gap-2 sm:gap-4 items-center mt-2">
                       <LogOut className="w-4 h-4 sm:w-5 sm:h-5" />
-                      <Button variant="link" className="text-sm sm:text-base">
+                      <Button
+                        variant="link"
+                        className="text-sm sm:text-base"
+                        onClick={handleLogout}
+                      >
                         Logout
                       </Button>
                     </div>

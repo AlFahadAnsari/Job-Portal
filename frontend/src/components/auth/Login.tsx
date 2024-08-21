@@ -9,6 +9,8 @@ import toast from "react-hot-toast";
 import { useState } from "react";
 import { Button } from "../ui/button";
 import { Loader2 } from "lucide-react";
+import { useDispatch } from "react-redux";
+import { setuser } from "@/redux/authSlice";
 
 type Inputs = {
   gmail: string;
@@ -18,6 +20,7 @@ type Inputs = {
 
 const Login = () => {
   const [loading, setLoading] = useState(false);
+  const dispatch = useDispatch();
   const navi = useNavigate();
   const {
     register,
@@ -38,6 +41,7 @@ const Login = () => {
         toast.success(res.data.message);
         reset();
         navi("/");
+        dispatch(setuser(res.data.user));
         setLoading(false);
       }
     } catch (error) {
@@ -113,7 +117,10 @@ const Login = () => {
             </div>
             <div className="flex items-center justify-between">
               {loading ? (
-                <Button disabled className="rounded-full w-full bg-blue-600 hover:bg-blue-500">
+                <Button
+                  disabled
+                  className="rounded-full w-full bg-blue-600 hover:bg-blue-500"
+                >
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                   Please wait
                 </Button>
