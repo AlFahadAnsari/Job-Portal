@@ -32,11 +32,12 @@ const Login = () => {
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     setLoading(true);
     try {
-      const res = await axios.post(BASE_URL + "/api/user/login", {
+      const paylaod = {
         email: data.gmail,
         password: data.password,
         role: data.role,
-      });
+      };
+      const res = await axios.post(BASE_URL + "/api/user/login", paylaod);
       if (res.status === 200) {
         toast.success(res.data.message);
         reset();

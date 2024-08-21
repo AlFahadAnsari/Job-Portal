@@ -4,20 +4,20 @@ import { RootState } from "./store";
 const authSlice = createSlice({
   name: "auth",
   initialState: {
-    loading: false,
+    // loading: false,
     user: null,
   },
   reducers: {
-    setLoadin: (state, action) => {
-      state.loading = action.payload;
-    },
+    // setLoadin: (state, action) => {
+    //   state.loading = action.payload;
+    // },
     setuser: (state, action) => {
       state.user = action.payload;
     },
   },
 });
 
-export const { setuser, setLoadin } = authSlice.actions;
+export const { setuser } = authSlice.actions;
 
 export const setUser = (state: RootState) => state.auth.user;
 export default authSlice.reducer;

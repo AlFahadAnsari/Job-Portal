@@ -4,11 +4,15 @@ import { Contact, Mail, Pen } from "lucide-react";
 import { Badge } from "./ui/badge";
 import { Button } from "./ui/button";
 import AppliedJobs from "./AppliedJobsTable";
+import { useState } from "react";
+import EditProfile from "./EditProfile";
 
 const Skils = ["Html", "Css", "Javascript", "ReactJs"];
 const resume = true;
 
 const Profile = () => {
+  const [open, setOpen] = useState(false);
+
   return (
     <div>
       <div>
@@ -33,7 +37,11 @@ const Profile = () => {
             </div>
           </div>
 
-          <Button variant={"outline"} size={"icon"}>
+          <Button
+            variant={"outline"}
+            size={"icon"}
+            onClick={() => setOpen(true)}
+          >
             <Pen />
           </Button>
         </div>
@@ -94,6 +102,8 @@ const Profile = () => {
         <div>
           <AppliedJobs />
         </div>
+
+        <div>{open == true ? <EditProfile /> : ""}</div>
       </div>
     </div>
   );
