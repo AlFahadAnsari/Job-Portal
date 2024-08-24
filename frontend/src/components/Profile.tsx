@@ -6,12 +6,14 @@ import { Button } from "./ui/button";
 import AppliedJobs from "./AppliedJobsTable";
 import { useState } from "react";
 import EditProfile from "./EditProfile";
+import { useSelector } from "react-redux";
 
-const Skils = ["Html", "Css", "Javascript", "ReactJs"];
+// const Skils = ["Html", "Css", "Javascript", "ReactJs"];
 const resume = true;
 
 const Profile = () => {
   const [open, setOpen] = useState<boolean>(false);
+  const { user } = useSelector((store) => store.auth);
 
   return (
     <div>
@@ -29,10 +31,11 @@ const Profile = () => {
               />
             </Avatar>
             <div className="mt-5">
-              <h1 className="font-bold">Full Name</h1>
+              <h1 className="font-bold">
+                {user?.fullname ? user?.fullname : "your name"}
+              </h1>
               <p>
-                Lorem ipsum dolor sit, amet consectetur adipisicing elit.
-                Labore, architecto.
+                {user?.profile?.bio ? user.profile.bio : <span>Add Bio</span>}
               </p>
             </div>
           </div>
@@ -50,23 +53,26 @@ const Profile = () => {
         <div className="pl-10 flex flex-col gap-3 ">
           <div className=" flex gap-4">
             <Mail />
-            <p>afahadansari@gmail.com</p>
+            <p>{user?.email}</p>
           </div>
           <div className=" flex gap-4">
             <Contact />
-            <p>7506022336</p>
+            <p>{user?.phoneNumber}</p>
           </div>
 
           {/* skilss */}
           <div className="mt-3">
             <p className="mb-2">Skills</p>
             <div className="flex gap-4">
-              {Skils.length === 0 ? (
+              {user?.profile?.skills.length == 0 ? (
                 <span className="font-bold">Na</span>
               ) : (
-                Skils.map((i , index) => {
+                user?.profile.skills.map((i:any, index:number) => {
                   return (
-                    <Badge key={index} className="bg-black rounded-2xl py-1 hover:bg-black hover:text-white text-white ">
+                    <Badge
+                      key={index}
+                      className="bg-black rounded-2xl py-1 hover:bg-black hover:text-white text-white"
+                    >
                       {i}
                     </Badge>
                   );

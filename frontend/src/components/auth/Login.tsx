@@ -59,8 +59,8 @@ const Login = () => {
   return (
     <div className="flex items-center justify-center mt-[6rem] md:mt-0">
       <div className="flex shadow-lg rounded-lg overflow-hidden bg-white">
-        <div className="hidden md:block w-1/2">
-          <img src={loginImg} alt="Login" className="h-full object-cover" />
+        <div className="hidden md:block w-1/2 lg:mt-2 md:mt-52">
+          <img src={loginImg} alt="Login" className="object-contain" />
         </div>
         <div className="w-full md:w-1/2 p-12 md:mt-44">
           <h2 className="text-2xl font-bold text-center text-gray-700">
@@ -127,7 +127,7 @@ const Login = () => {
                   Please wait
                 </Button>
               ) : (
-                <Button className="w-full rounded-full self-center bg-blue-600 hover:bg-blue-500 ">
+                <Button className="w-full rounded-full self-center bg-blue-600 hover:bg-blue-500  text-white">
                   Login
                 </Button>
               )}
