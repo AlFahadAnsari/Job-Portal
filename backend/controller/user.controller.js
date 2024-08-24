@@ -1,6 +1,6 @@
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-import  {User} from "../model/user.model.js";
+import { User } from "../model/user.model.js";
 // import getDataUri from "../utils/datauri.js";
 // import cloudinary from "../utils/cloudinary.js";
 
@@ -28,7 +28,7 @@ export const register = async (req, res) => {
     }
     const hashedPassword = await bcrypt.hash(password, 10);
 
-   const newUserCreate = await User.create({
+    const newUserCreate = await User.create({
       fullname,
       email,
       phoneNumber,
@@ -72,7 +72,7 @@ export const login = async (req, res) => {
         success: false,
       });
     }
-    // check role is correct or not
+
     if (role !== user.role) {
       return res.status(400).json({
         message: "Account doesn't exist with current role.",
@@ -83,7 +83,8 @@ export const login = async (req, res) => {
     const tokenData = {
       userId: user._id,
     };
-    const token = await jwt.sign(tokenData, process.env.SECRET_KEY, {
+
+    const token = jwt.sign(tokenData, process.env.SECRET_KEY, {
       expiresIn: "1d",
     });
 
@@ -108,8 +109,6 @@ export const login = async (req, res) => {
         user,
         success: true,
       });
-
-      
   } catch (error) {
     console.log(error);
   }
@@ -117,67 +116,71 @@ export const login = async (req, res) => {
 
 export const logout = async (req, res) => {
   try {
-    return res.status(200).cookie("token", "", { maxAge: 0 }).json({
+    res.status(200).cookie("token", "", { maxAge: 0 }).json({
       message: "Logged out successfully.",
       success: true,
     });
   } catch (error) {
-    console.log(error);
+    console.error(error);
+    res.status(500).json({
+      message: "An error occurred during logout.",
+      success: false,
+    });
   }
 };
 
-export const updateProfile = async (req, res) => {
+export const UpdateProfile = async (req, res) => {
   try {
-    const { fullname, email, phoneNumber, bio, skills } = req.body;
+    const { fullname, email, phonenumber, bio, skills } = req.body;
 
-    const file = req.file;
-    // cloudinary ayega idhar
-    const fileUri = getDataUri(file);
-    const cloudResponse = await cloudinary.uploader.upload(fileUri.content);
-
-    let skillsArray;
+    let skillArrey;
     if (skills) {
-      skillsArray = skills.split(",");
+      skillArrey = skills.split(",");
     }
-    const userId = req.id; // middleware authentication
-    let user = await User.findById(userId);
+    const userId = req.id;
+    const user = await User.findById(userId);
 
     if (!user) {
-      return res.status(400).json({
-        message: "User not found.",
+      return res.status(404).json({
+        message: "user not found",
         success: false,
       });
     }
-    // updating data
+
     if (fullname) user.fullname = fullname;
     if (email) user.email = email;
-    if (phoneNumber) user.phoneNumber = phoneNumber;
-    if (bio) user.profile.bio = bio;
-    if (skills) user.profile.skills = skillsArray;
+    if (phonenumber) user.phonenumber = phonenumber;
+    if (bio) user.bio = bio;
+    if (skills) user.skills = skills;
 
-    // resume comes later here...
-    // if(cloudResponse){
-    //     user.profile.resume = cloudResponse.secure_url // save the cloudinary url
-    //     user.profile.resumeOriginalName = file.originalname // Save the original file name
-    // }
+    // (user.fullname = fullname),
+    //   (user.email = email),
+    //   (user.phonenumber = phonenumber),
+    //   (user.bio = bio),
+    //   (user.skills = skills);
 
     await user.save();
 
-    user = {
-      _id: user._id,
+    const updatedUser = {
+      id: user._id,
       fullname: user.fullname,
       email: user.email,
-      phoneNumber: user.phoneNumber,
       role: user.role,
+      phonenumber: user.phonenumber,
       profile: user.profile,
+      skills: user.skills, // Include the skills in the response if needed
     };
 
     return res.status(200).json({
-      message: "Profile updated successfully.",
-      user,
+      message: "update successful",
+      user: updatedUser,
       success: true,
     });
   } catch (error) {
     console.log(error);
+    return res.status(500).json({
+      message: "An error occurred while updating the profile",
+      success: false,
+    });
   }
 };

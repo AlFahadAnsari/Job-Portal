@@ -8,7 +8,7 @@ import { BASE_URL } from "../constant";
 import toast from "react-hot-toast";
 import { useState } from "react";
 import { Button } from "../ui/button";
-import { Loader2 } from "lucide-react";
+import { Cookie, Loader2 } from "lucide-react";
 import { useDispatch } from "react-redux";
 import { setuser } from "@/redux/authSlice";
 
@@ -19,15 +19,16 @@ type Inputs = {
 };
 
 const Login = () => {
-  const [loading, setLoading] = useState(false);
-  const dispatch = useDispatch();
-  const navi = useNavigate();
   const {
     register,
     handleSubmit,
     reset,
     formState: { errors },
   } = useForm<Inputs>();
+
+  const [loading, setLoading] = useState(false);
+  const dispatch = useDispatch();
+  const navi = useNavigate();
 
   const onSubmit: SubmitHandler<Inputs> = async (data) => {
     setLoading(true);
@@ -56,7 +57,7 @@ const Login = () => {
   };
 
   return (
-    <div className="flex items-center justify-center mt-[10rem] md:mt-0">
+    <div className="flex items-center justify-center mt-[6rem] md:mt-0">
       <div className="flex shadow-lg rounded-lg overflow-hidden bg-white">
         <div className="hidden md:block w-1/2">
           <img src={loginImg} alt="Login" className="h-full object-cover" />

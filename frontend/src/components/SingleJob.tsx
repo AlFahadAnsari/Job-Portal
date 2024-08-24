@@ -8,7 +8,7 @@ const SingleJob = () => {
   const navi = useNavigate();
   const JobId = "lkjhsgfsx";
   return (
-    <div className="p-5 shadow-xl  rounded-md bg-white border border-gray-100 hover:scale-95 transition-all ">
+    <div className="p-5 shadow-xl  rounded-md bg-white border border-gray-100 ">
       <div className="flex justify-between">
         <p>2 days ago </p>
         <Button className="" variant={"outline"} size={"icon"}>

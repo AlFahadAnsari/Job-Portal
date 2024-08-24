@@ -18,7 +18,7 @@ const Navbar = () => {
 
   const handleLogout = async () => {
     try {
-      const res = await axios.post(BASE_URL + "/api/user/logout");
+      const res = await axios.get(BASE_URL + "/api/user/logout");
       if (res.status == 200) {
         toast.success(res.data.message);
         navi("/login");

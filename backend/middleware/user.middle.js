@@ -1,11 +1,11 @@
 import jwt from "jsonwebtoken";
 
- const CheckAuth = async (req, res, next) => {
+const CheckAuth = async (req, res, next) => {
   try {
     const token = req.cookies.token;
     if (!token) {
       return res.status(401).json({
-        message: "user not aut",
+        message: "User not authenticated.",
         success: false,
       });
     }
@@ -13,15 +13,20 @@ import jwt from "jsonwebtoken";
     const verify = await jwt.verify(token, process.env.SECRET_KEY);
     if (!verify) {
       return res.status(401).json({
-        message: "invalid user",
+        message: "Invalid token.",
         success: false,
       });
     }
 
-    req.id=verify.id
-    next()
-  } catch (error) {}
+    req.id = verify.userId;
+    next();
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      message: "Server error.",
+      success: false,
+    });
+  }
 };
 
-
-export default CheckAuth
+export default CheckAuth;

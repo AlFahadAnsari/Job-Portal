@@ -9,7 +9,7 @@ const LatestJobOp = () => {
       </h1>
 
       <div className="grid lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1 mt-5">
-        {RandomJobs.slice(0,6).map(()=><JobCards/>)}
+        {RandomJobs.slice(0,6).map((index)=><JobCards key={index}/>)}
       </div>
 
     </div>

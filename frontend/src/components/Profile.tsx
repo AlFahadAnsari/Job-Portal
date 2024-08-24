@@ -11,7 +11,7 @@ const Skils = ["Html", "Css", "Javascript", "ReactJs"];
 const resume = true;
 
 const Profile = () => {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState<boolean>(false);
 
   return (
     <div>
@@ -64,9 +64,9 @@ const Profile = () => {
               {Skils.length === 0 ? (
                 <span className="font-bold">Na</span>
               ) : (
-                Skils.map((i) => {
+                Skils.map((i , index) => {
                   return (
-                    <Badge className="bg-black rounded-2xl py-1 hover:bg-black hover:text-white text-white ">
+                    <Badge key={index} className="bg-black rounded-2xl py-1 hover:bg-black hover:text-white text-white ">
                       {i}
                     </Badge>
                   );
@@ -102,8 +102,7 @@ const Profile = () => {
         <div>
           <AppliedJobs />
         </div>
-
-        <div>{open == true ? <EditProfile /> : ""}</div>
+        <EditProfile open={open} setOpen={setOpen} />
       </div>
     </div>
   );
