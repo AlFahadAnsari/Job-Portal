@@ -1,6 +1,53 @@
+import { useParams } from "react-router-dom";
 import { Badge } from "./ui/badge";
+import { useEffect } from "react";
+import { BASE_URL } from "./constant";
+import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
+import toast from "react-hot-toast";
+import { setSingleJob } from "@/redux/jobSlice";
+import { RootState } from "@/redux/store";
+
+interface Job {
+  _id: string;
+  title: string;
+  description: string;
+  position: number;
+  jobType: string;
+  salary: string;
+  company: {
+    name: string;
+  };
+}
 
 const JobDiscription = () => {
+  const param = useParams();
+  const jobId = param.id;
+  const dispatch = useDispatch();
+  const { user } = useSelector((state: RootState) => state.auth);
+  const { singleJob } = useSelector((state: RootState) => state.job);
+
+  const getSingleJob = async () => {
+    try {
+      const res = await axios.get<Job>(`${BASE_URL}/api/job/get/${jobId}`, {
+        withCredentials: true,
+      });
+      if (res.status === 200) {
+        dispatch(setSingleJob(res.data));
+      }
+    } catch (error) {
+      if (axios.isAxiosError(error) && error.response) {
+        toast.error(error.response.data.message || "An error occurred");
+      } else {
+        toast.error("An error occurred");
+      }
+    }
+  };
+
+  useEffect(() => {
+    getSingleJob();
+  }, [jobId, dispatch, user?.id]);
+  
   return (
     <div className="max-w-7xl mx-auto bg-white mt-5 text-xl">
       <h1 className="font-bold">Title</h1>
@@ -17,7 +64,7 @@ const JobDiscription = () => {
       </div>
 
       <div>
-        <h1 className="text-md my-4 font-serif">Job Description</h1>
+        <h1 className="text-md my-4 font-serif">{singleJob?.description}</h1>
         <hr />
       </div>
 

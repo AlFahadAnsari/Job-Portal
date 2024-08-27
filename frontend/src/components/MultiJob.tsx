@@ -1,9 +1,24 @@
 import Navbar from "@/shared/Navbar";
 import FilterCards from "./FilterCards";
 import SingleJob from "./SingleJob";
+import { RootState } from "@/redux/store";
+import { useSelector } from "react-redux";
 
-const jobsArray = [1, 2, 3, 4, 5, 6, 7, 8];
+interface Job {
+  _id: string;
+  title: string;
+  description: string;
+  position: number;
+  jobType: string;
+  salary: string;
+  company: {
+    name: string;
+  };
+}
+
 const Job = () => {
+  const { getAllJob } = useSelector((state: RootState) => state.job);
+
   return (
     <div>
       <Navbar />
@@ -12,13 +27,13 @@ const Job = () => {
           <div className="w-20%">
             <FilterCards />
           </div>
-          {jobsArray.length <= 0 ? (
+          {getAllJob.length <= 0 ? (
             <span>No Job Found</span>
           ) : (
             <div className="flex-1 h-[88vh] overflow-y-auto pb-5">
-              <div className="grid lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1 gap-4 ">
-                {jobsArray.map(() => (
-                  <SingleJob />
+              <div className="grid lg:grid-cols-3 md:grid-cols-2 sm:grid-cols-1 gap-4">
+                {getAllJob.map((job: Job) => (
+                  <SingleJob key={job._id} job={job} />
                 ))}
               </div>
             </div>

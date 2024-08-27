@@ -91,7 +91,7 @@ export const getJobs = async (req, res) => {
     });
 
   } catch (error) {
-    console.error("Error fetching jobs:", error); // Improved error logging
+    console.error("Error fetching jobs:", error); 
     return res.status(500).json({
       message: "An error occurred while fetching jobs.",
       success: false,
@@ -102,7 +102,7 @@ export const getJobs = async (req, res) => {
 export const getJobById = async (req, res) => {
   try {
     const jobId = req.param.id;
-    const findJobId = await Jobs.find(jobId);
+    const findJobId = await Jobs.findOne(jobId);
 
     if (!findJobId) {
       return res.status(404).json({

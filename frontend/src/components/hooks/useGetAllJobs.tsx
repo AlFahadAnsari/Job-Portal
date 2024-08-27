@@ -5,15 +5,17 @@ import { useDispatch } from "react-redux";
 import { setAllJob } from "@/redux/jobSlice";
 import toast from "react-hot-toast";
 
-const LatestJob = () => {
+const useGetAllJobs = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
     const getLatestJob = async () => {
       try {
-        const res = await axios.get(BASE_URL + "/api/job/get");
+        const res = await axios.get(BASE_URL + "/api/job/get", {
+          withCredentials: true,
+        });
         if (res.status === 200) {
-          dispatch(setAllJob(res.data));
+          dispatch(setAllJob(res.data.jobs));
         }
       } catch (error) {
         if (axios.isAxiosError(error) && error.response) {
@@ -27,4 +29,4 @@ const LatestJob = () => {
   }, []);
 };
 
-export default LatestJob;
+export default useGetAllJobs;

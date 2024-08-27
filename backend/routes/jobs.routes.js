@@ -7,6 +7,6 @@ const router = express.Router();
 router.route("/postjob").post(userMiddleware,postJob);
 router.route("/get").get(userMiddleware,getJobs);
 router.route("/adminjob").get(userMiddleware, adminJobs);
-router.route("/get/:id").post(userMiddleware ,getJobById )
+router.route("/get/:id").get(userMiddleware ,getJobById )
 
 export default router;

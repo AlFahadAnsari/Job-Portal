@@ -78,9 +78,10 @@ const Navbar = () => {
             <div>
               <Popover>
                 <PopoverTrigger asChild>
-                  <Avatar className="w-8 h-8 sm:w-10 sm:h-10">
+                  <Avatar className="w-8 h-8 sm:w-10 sm:h-10 ">
                     <AvatarImage
-                       src={
+                      className="object-contain"
+                      src={
                         user?.profile?.profilePhoto ||
                         "https://github.com/shadcn.png"
                       }
@@ -90,8 +91,9 @@ const Navbar = () => {
                 </PopoverTrigger>
                 <PopoverContent className="w-48 sm:w-64">
                   <div className="flex gap-4 items-center">
-                    <Avatar className="w-8 h-8 rounded-full">
+                    <Avatar className="w-8 h-8 rounded-full ">
                       <AvatarImage
+                        className="object-contain"
                         src={
                           user?.profile?.profilePhoto ||
                           "https://github.com/shadcn.png"

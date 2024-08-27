@@ -22,8 +22,6 @@ const persistConfig = {
 const rootReducer = {
   auth: authSlice,
   job: jobSlice,
-
-
 };
 
 const persistedReducer = persistReducer(

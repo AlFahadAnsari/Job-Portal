@@ -4,9 +4,23 @@ import { Avatar, AvatarImage } from "./ui/avatar";
 import { Badge } from "./ui/badge";
 import { useNavigate } from "react-router-dom";
 
-const SingleJob = () => {
+interface Job {
+  _id:string
+  title: string;
+  description: string;
+  position: number;
+  jobType: string;
+  salary: string;
+  company: {
+    name: string;
+  };
+}
+interface SingleJobProps {
+  job: Job;
+}
+
+const SingleJob: React.FC<SingleJobProps> = ({ job }) => {
   const navi = useNavigate();
-  const JobId = "lkjhsgfsx";
   return (
     <div className="p-5 shadow-xl  rounded-md bg-white border border-gray-100 ">
       <div className="flex justify-between">
@@ -23,24 +37,24 @@ const SingleJob = () => {
           </Avatar>
         </Button>
         <div>
-          <h1>Company name</h1>
+          <h1>{job?.company?.name}</h1>
           <p>India</p>
         </div>
       </div>
 
       <div>
-        <h1 className="font-bold my-3">Title</h1>
-        <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ea, a. </p>
+        <h1 className="font-bold my-3">{job?.title}</h1>
+        <p>{job?.description} </p>
       </div>
 
       <div className="flex items-center gap-2 mt-4">
-        <Badge className="text-blue-500 font-bold text-sm">12 opening</Badge>
-        <Badge className="text-red-500 font-bold text-sm">part time</Badge>
-        <Badge className="text-[#6a38c2] font-bold text-sm ">12 Lpa</Badge>
+        <Badge className="text-blue-500 font-bold text-sm" variant={"outline"}>{job?.position} position</Badge>
+        <Badge className="text-red-500 font-bold text-sm" variant={"outline"}>{job?.jobType}</Badge>
+        <Badge className="text-[#6a38c2] font-bold text-sm " variant={"outline"}>{job?.salary}</Badge>
       </div>
       <div className="flex gap-5 mt-4">
         <Button
-          onClick={() => navi(`/description/${JobId}`)}
+          onClick={() => navi(`/description/${job?._id}`)}
           variant={"outline"}
         >
           Details
