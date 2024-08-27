@@ -5,10 +5,11 @@ import { Input } from "./ui/input";
 import { Label } from "./ui/label";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { useState, useEffect } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { BASE_URL } from "./constant";
+import { setuser } from "@/redux/authSlice";
 
 interface EditProfileProps {
   open: boolean;
@@ -27,18 +28,14 @@ type Inputs = {
 const EditProfile: React.FC<EditProfileProps> = ({ open, setOpen }) => {
   const [loading, setLoading] = useState(false);
   const { user } = useSelector((store) => store.auth);
-  const {
-    register,
-    handleSubmit,
-    setValue,
-    formState: { errors },
-  } = useForm<Inputs>();
+  const dispatch = useDispatch();
+  const { register, handleSubmit, setValue } = useForm<Inputs>();
 
   useEffect(() => {
     setValue("fullname", user?.fullname || "");
     setValue("email", user?.email || "");
     setValue("phonenumber", user?.phoneNumber || "");
-    setValue("bio", user?.bio || "");
+    setValue("bio", user?.profile?.bio || "");
     setValue("skills", user?.profile?.skills.join(", ") || "");
     setValue("resume", user?.file || "");
   }, [user, setValue]);
@@ -56,18 +53,23 @@ const EditProfile: React.FC<EditProfileProps> = ({ open, setOpen }) => {
       };
       const res = await axios.post(
         BASE_URL + "/api/user/profile/update",
-        payload
+        payload,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+          withCredentials: true,
+        }
       );
       if (res.status === 200) {
         toast.success(res.data.message);
-        setOpen(true);
+        setOpen(false);
+        dispatch(setuser(res.data.user));
       }
     } catch (error) {
       setLoading(false);
       if (axios.isAxiosError(error) && error.response) {
         toast.error(error.response.data.message || "An error occurred");
-      } else {
-        toast.error("An error occurred");
       }
     } finally {
       setLoading(false);

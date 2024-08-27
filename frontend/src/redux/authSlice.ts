@@ -4,13 +4,9 @@ import { RootState } from "./store";
 const authSlice = createSlice({
   name: "auth",
   initialState: {
-    // loading: false,
     user: null,
   },
   reducers: {
-    // setLoadin: (state, action) => {
-    //   state.loading = action.payload;
-    // },
     setuser: (state, action) => {
       state.user = action.payload;
     },

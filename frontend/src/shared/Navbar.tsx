@@ -6,21 +6,26 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { setuser } from "@/redux/authSlice";
 import { RootState } from "@/redux/store";
 import axios from "axios";
 import { LogOut, User2 } from "lucide-react";
 import toast from "react-hot-toast";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 
 const Navbar = () => {
   const navi = useNavigate();
+  const dispatch = useDispatch();
 
   const handleLogout = async () => {
     try {
-      const res = await axios.get(BASE_URL + "/api/user/logout");
+      const res = await axios.get(BASE_URL + "/api/user/logout", {
+        withCredentials: true,
+      });
       if (res.status == 200) {
         toast.success(res.data.message);
+        dispatch(setuser(null));
         navi("/login");
       }
     } catch (error) {
@@ -75,19 +80,26 @@ const Navbar = () => {
                 <PopoverTrigger asChild>
                   <Avatar className="w-8 h-8 sm:w-10 sm:h-10">
                     <AvatarImage
-                      src="https://github.com/shadcn.png"
-                      alt="@shadcn"
+                       src={
+                        user?.profile?.profilePhoto ||
+                        "https://github.com/shadcn.png"
+                      }
+                      alt="User profile"
                     />
                   </Avatar>
                 </PopoverTrigger>
                 <PopoverContent className="w-48 sm:w-64">
                   <div className="flex gap-4 items-center">
-                    <Avatar className="w-8 h-8">
+                    <Avatar className="w-8 h-8 rounded-full">
                       <AvatarImage
-                        src="https://github.com/shadcn.png"
-                        alt="@shadcn"
+                        src={
+                          user?.profile?.profilePhoto ||
+                          "https://github.com/shadcn.png"
+                        }
+                        alt="User profile"
                       />
                     </Avatar>
+
                     <div>
                       <h1 className="text-sm sm:text-base">Alfahad Ansari</h1>
                       <p className="text-xs sm:text-sm">

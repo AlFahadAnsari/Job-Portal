@@ -1,8 +1,10 @@
+// import LatestJob from "./hooks/useGetAllJobs";
 import { Badge } from "./ui/badge";
 
 const JobCards = () => {
+  // LatestJob()
   return (
-    <div className="p-5 rounded-md shadow-xl m-4 cursor-pointer">
+    <div className="p-5 rounded-md shadow-xl m-4 cursor-pointer bg-white border-2 border-gray-100 ">
       <div>
         <h1 className="font-bold ">Company Name</h1>
         <p className="text-slate-500">india</p>
@@ -10,7 +12,9 @@ const JobCards = () => {
 
       <div>
         <h1 className="font-bold">Job Tiltle</h1>
-        <p className="text-slate-500">Lorem ipsum dolor sit amet consectetur, adipisicing elit.</p>
+        <p className="text-slate-500">
+          Lorem ipsum dolor sit amet consectetur, adipisicing elit.
+        </p>
       </div>
 
       <div className="flex items-center gap-2 mt-4">

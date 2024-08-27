@@ -1,4 +1,4 @@
-import signupImg from "../../assets/signup.png";
+import signupImg from "../../assets/img2.png";
 import { Link, useNavigate } from "react-router-dom";
 import { Input } from "../ui/input";
 import { Label } from "../ui/label";
@@ -15,12 +15,12 @@ type Inputs = {
   email: string;
   phoneNumber: string;
   password: string;
-  role: string; // Now correctly typed as a string
+  role: string;
   file: FileList;
 };
 
 const Signup = () => {
-  const navi =useNavigate()
+  const navi = useNavigate();
   const [loading, setLoading] = useState(false);
   const {
     register,
@@ -43,12 +43,16 @@ const Signup = () => {
       formData.append("file", data.file[0]);
     }
     try {
-      const res = await axios.post(BASE_URL + "/api/user/register", formData);
+      const res = await axios.post(BASE_URL + "/api/user/register", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+        withCredentials: true,
+      });
+
       if (res.status == 201) {
         toast.success("register successfull");
         reset();
         setLoading(false);
-        navi("/login")
+        navi("/login");
       }
     } catch (error) {
       setLoading(false);
@@ -101,6 +105,8 @@ const Signup = () => {
               <Input
                 {...register("phoneNumber", { required: true })}
                 type="text"
+                minLength={10}
+                maxLength={10}
                 className="w-full px-4 py-2 mt-2 border rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500"
                 placeholder="Enter your phone number"
               />
@@ -113,6 +119,8 @@ const Signup = () => {
               <Input
                 {...register("password", { required: true })}
                 type="password"
+                maxLength={100}
+                minLength={6}
                 className="w-full px-4 py-2 mt-2 border rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500"
                 placeholder="Enter your password"
               />
@@ -121,11 +129,9 @@ const Signup = () => {
               )}
             </div>
             <div className="mb-4">
-              <Label className="block text-gray-700">File</Label>
+              <Label className="block text-gray-700">Profile</Label>
               <Input
                 {...register("file")}
-                minLength={10}
-                maxLength={10}
                 type="file"
                 className="w-full px-4 py-2 mt-2 border rounded-md focus:outline-none focus:ring-1 focus:ring-blue-500"
               />
@@ -166,7 +172,7 @@ const Signup = () => {
               </Button>
             ) : (
               <Button className="w-full rounded-full self-center bg-blue-500 hover:bg-blue-700">
-                Login
+                Signup
               </Button>
             )}
             <p className="mt-4 text-sm text-center text-gray-600">

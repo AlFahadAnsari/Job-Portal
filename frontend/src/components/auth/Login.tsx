@@ -1,4 +1,4 @@
-import loginImg from "../../assets/login.png";
+import loginImg from "../../assets/img1.png";
 import { Link, useNavigate } from "react-router-dom";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
@@ -8,7 +8,7 @@ import { BASE_URL } from "../constant";
 import toast from "react-hot-toast";
 import { useState } from "react";
 import { Button } from "../ui/button";
-import { Cookie, Loader2 } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import { useDispatch } from "react-redux";
 import { setuser } from "@/redux/authSlice";
 
@@ -27,6 +27,7 @@ const Login = () => {
   } = useForm<Inputs>();
 
   const [loading, setLoading] = useState(false);
+  // const [token, setToken] = useState("");
   const dispatch = useDispatch();
   const navi = useNavigate();
 
@@ -38,24 +39,30 @@ const Login = () => {
         password: data.password,
         role: data.role,
       };
-      const res = await axios.post(BASE_URL + "/api/user/login", paylaod);
+
+      const res = await axios.post(BASE_URL + "/api/user/login", paylaod, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        withCredentials: true,
+      });
+
       if (res.status === 200) {
         toast.success(res.data.message);
         reset();
         navi("/");
         dispatch(setuser(res.data.user));
-        setLoading(false);
       }
     } catch (error) {
-      setLoading(false);
       if (axios.isAxiosError(error) && error.response) {
         toast.error(error.response.data.message || "An error occurred");
       } else {
         toast.error("An error occurred");
       }
+    } finally {
+      setLoading(false);
     }
   };
-
   return (
     <div className="flex items-center justify-center mt-[6rem] md:mt-0">
       <div className="flex shadow-lg rounded-lg overflow-hidden bg-white">

@@ -67,7 +67,7 @@ const Profile = () => {
               {user?.profile?.skills.length == 0 ? (
                 <span className="font-bold">Na</span>
               ) : (
-                user?.profile.skills.map((i:any, index:number) => {
+                user?.profile?.skills.map((i:any, index:number) => {
                   return (
                     <Badge
                       key={index}
