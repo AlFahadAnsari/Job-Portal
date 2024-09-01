@@ -1,12 +1,14 @@
 import { useParams } from "react-router-dom";
 import { Badge } from "./ui/badge";
-import { useEffect } from "react";
-import { BASE_URL } from "./constant";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import { useDispatch, useSelector } from "react-redux";
 import toast from "react-hot-toast";
 import { setSingleJob } from "@/redux/jobSlice";
-import { RootState } from "@/redux/store";
+import { RootState, AppDispatch } from "@/redux/store";
+import { Button } from "./ui/button";
+import { BASE_URL } from "./constant";
+import { Loader2 } from "lucide-react";
 
 interface Job {
   _id: string;
@@ -15,29 +17,46 @@ interface Job {
   position: number;
   jobType: string;
   salary: string;
+  experienceLevel: string;
+  location: string;
+  createdAt: string;
   company: {
     name: string;
   };
 }
 
-const JobDiscription = () => {
-  const param = useParams();
-  const jobId = param.id;
-  const dispatch = useDispatch();
+interface JobState {
+  singleJob: Job | null;
+}
+
+const JobDescription: React.FC = () => {
+  const [loading, setLoading] = useState(false);
+  const { id: jobId } = useParams<{ id: string }>();
+  const dispatch = useDispatch<AppDispatch>();
   const { user } = useSelector((state: RootState) => state.auth);
-  const { singleJob } = useSelector((state: RootState) => state.job);
+  const { singleJob } = useSelector(
+    (state: RootState) => state.job
+  ) as JobState;
 
   const getSingleJob = async () => {
     try {
-      const res = await axios.get<Job>(`${BASE_URL}/api/job/get/${jobId}`, {
-        withCredentials: true,
-      });
+      const res = await axios.get<{ job: Job }>(
+        `${BASE_URL}/api/job/get/${jobId}`,
+        {
+          withCredentials: true,
+        }
+      );
+
       if (res.status === 200) {
-        dispatch(setSingleJob(res.data));
+        dispatch(setSingleJob(res.data.job));
+        // setIsApplied(res.data.job.applications.some(application => application.applicant === user?._id))
       }
     } catch (error) {
       if (axios.isAxiosError(error) && error.response) {
-        toast.error(error.response.data.message || "An error occurred");
+        toast.error(
+          (error.response.data as { message: string }).message ||
+            "An error occurred"
+        );
       } else {
         toast.error("An error occurred");
       }
@@ -47,56 +66,124 @@ const JobDiscription = () => {
   useEffect(() => {
     getSingleJob();
   }, [jobId, dispatch, user?.id]);
-  
+
+  const handleApply = async () => {
+    setLoading(true);
+    try {
+      const res = await axios.get(
+        BASE_URL + `/api/application/applyjob/${jobId}`,
+        { withCredentials: true }
+      );
+      if (res.data === 201) {
+        toast.success(res.data.message);
+      }
+    } catch (error) {
+      if (axios.isAxiosError(error) && error.response) {
+        toast.error(error.response.data.message || "An error occurred");
+      } else {
+        toast.error("An error occurred");
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
-    <div className="max-w-7xl mx-auto bg-white mt-5 text-xl">
-      <h1 className="font-bold">Title</h1>
+    <div className="max-w-7xl mx-auto bg-white mt-5  p-10 md:p-0">
+      <h1 className="font-bold text-xl capitalize ">{singleJob?.title || "Job Title"}</h1>
       <div className="flex items-center gap-2 mt-4">
         <Badge className="text-blue-500 font-bold text-sm border border-slate-200">
-          12 opening
+          {singleJob
+            ? `${singleJob.position} opening${
+                singleJob.position > 1 ? "s" : ""
+              }`
+            : "Loading..."}
         </Badge>
         <Badge className="text-red-500 font-bold text-sm border border-slate-200">
-          part time
+          {singleJob?.jobType || "Loading..."}
         </Badge>
-        <Badge className="text-[#6a38c2] font-bold text-sm border border-slate-200 ">
-          12 Lpa
+        <Badge className="text-[#6a38c2] font-bold text-sm border border-slate-200">
+          {singleJob?.salary || "Loading..."}
         </Badge>
       </div>
-
       <div>
-        <h1 className="text-md my-4 font-serif">{singleJob?.description}</h1>
+        <div className="flex justify-between">
+          <h1 className="text-md my-4 font-serif md:text-xl text-sm">
+            {singleJob?.description || "Loading description..."}
+          </h1>
+          {/* <Button
+            className="hover:bg-black hover:text-white bg-black text-white object-cover my-2 "
+            onClick={handleApply}
+          >
+            Apply for job
+          </Button> */}
+
+          {loading ? (
+            <Button
+              disabled
+              className="hover:bg-black hover:text-white bg-black text-white object-cover ml-5 mt-2 text-xs"
+            >
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              Please wait
+            </Button>
+          ) : (
+            <Button
+              className="hover:bg-black hover:text-white bg-black text-white object-cover ml-5 mt-2 text-xs"
+              onClick={handleApply}
+            >
+              Apply Job
+            </Button>
+          )}
+        </div>
         <hr />
       </div>
 
       <div className="text-base mt-4">
         <h1 className="font-bold">
-          Role : <span className="font-normal pl-4">Front-end developer</span>
-        </h1>
-        <h1 className="font-bold">
-          Location : <span className="font-normal pl-4">Andheri</span>
-        </h1>
-        <h1 className="font-bold">
-          Description :{" "}
+          Role:{" "}
           <span className="font-normal pl-4">
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Facilis,
-            molestias.
+            {singleJob?.title || "Loading..."}
           </span>
         </h1>
         <h1 className="font-bold">
-          experience : <span className="font-normal pl-4">0 - 2 years</span>
+          Location:{" "}
+          <span className="font-normal pl-4">
+            {singleJob?.location || "Loading..."}
+          </span>
         </h1>
         <h1 className="font-bold">
-          salary : <span className="font-normal pl-4"> 3 Lpa</span>
+          Description:{" "}
+          <span className="font-normal pl-4">
+            {singleJob?.description || "Loading..."}
+          </span>
         </h1>
         <h1 className="font-bold">
-          Totall Applicants : <span className="font-normal pl-4">4</span>
+          Experience:{" "}
+          <span className="font-normal pl-4">
+            {singleJob?.experienceLevel || "Loading..."}
+          </span>
         </h1>
         <h1 className="font-bold">
-          Post date : <span className="font-normal pl-4">17-10-24</span>
+          Salary:{" "}
+          <span className="font-normal pl-4">
+            {singleJob?.salary || "Loading..."}
+          </span>
+        </h1>
+        <h1 className="font-bold">
+          Total Applicants:{" "}
+          <span className="font-normal pl-4">
+            {singleJob?.position || "Loading..."}
+          </span>
+        </h1>
+        <h1 className="font-bold">
+          Post date:{" "}
+          <span className="font-normal pl-4">
+            {singleJob?.createdAt.split("T")[0] || "Loading..."}
+          </span>
         </h1>
       </div>
     </div>
   );
 };
 
-export default JobDiscription;
+export default JobDescription;

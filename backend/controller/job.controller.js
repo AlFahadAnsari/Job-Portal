@@ -101,22 +101,24 @@ export const getJobs = async (req, res) => {
 
 export const getJobById = async (req, res) => {
   try {
-    const jobId = req.param.id;
-    const findJobId = await Jobs.findOne(jobId);
+    const jobId = req.params.id;
+    const job = await Jobs.findById(jobId).populate({
+      path: "application",
+    });
 
-    if (!findJobId) {
-      return res.status(404).json({
-        message: "job not found",
+    if (!job) {
+      return res.status(404).json({ 
+        message: "Job not found.",
+        success: false,
       });
     }
-
-    return res.status(200).json({
-      findJobId,
-    });
+   return res.status(200).json({ job, success: true });
   } catch (error) {
     console.log(error);
+    return res.status(500).json({ message: "Server error", success: false });
   }
 };
+
 
 export const adminJobs = async (req, res) => {
   try {
