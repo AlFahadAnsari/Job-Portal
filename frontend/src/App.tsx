@@ -6,6 +6,7 @@ import Job from "./components/MultiJob";
 import BrowseJobs from "./components/BrowseJobs";
 import Profile from "./components/Profile";
 import JobDiscription from "./components/JobDiscription";
+import Companies from "./components/Companies";
 
 function App() {
   const appRouter = createBrowserRouter([
@@ -36,6 +37,13 @@ function App() {
     {
       path: "/profile/update",
       element: <Profile />,
+    },
+
+    //  admin auth
+
+    {
+      path: "/companies",
+      element: <Companies />,
     },
   ]);
 

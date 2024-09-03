@@ -14,6 +14,21 @@ import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 
+interface UserProfile {
+  profilePhoto: string | null;
+}
+
+interface User {
+  fullname: string;
+  description: string;
+  role: string;
+  profile?: UserProfile;
+}
+
+interface AuthState {
+  user: User | null;
+}
+
 const Navbar = () => {
   const navi = useNavigate();
   const dispatch = useDispatch();
@@ -33,7 +48,7 @@ const Navbar = () => {
     }
   };
 
-  const { user } = useSelector((state: RootState) => state.auth);
+  const { user } = useSelector((state: RootState) => state.auth as AuthState);
 
   return (
     <div className="w-full bg-white shadow-sm">
@@ -48,15 +63,28 @@ const Navbar = () => {
 
         <div className="flex font-medium items-center gap-5">
           <ul className="hidden sm:flex gap-5">
-            <li>
-              <Link to={"/"}>Home</Link>
-            </li>
-            <li>
-              <Link to={"/jobs"}>Jobs</Link>
-            </li>
-            <li>
-              <Link to={"/browsejob"}>Browes</Link>
-            </li>
+            {user && user.role === "recruiter" ? (
+              <>
+                <li>
+                  <Link to={"/companies"}>Companies</Link>
+                </li>
+                <li>
+                  <Link to={"/jobs"}>Jobs</Link>
+                </li>
+              </>
+            ) : (
+              <>
+                <li>
+                  <Link to={"/"}>Home</Link>
+                </li>
+                <li>
+                  <Link to={"/jobs"}>Jobs</Link>
+                </li>
+                <li>
+                  <Link to={"/browsejob"}>Browes</Link>
+                </li>
+              </>
+            )}
           </ul>
           {!user ? (
             <div className="flex gap-2 sm:gap-4">
@@ -103,31 +131,48 @@ const Navbar = () => {
                     </Avatar>
 
                     <div>
-                      <h1 className="text-sm sm:text-base">Alfahad Ansari</h1>
+                      <h1 className="text-sm sm:text-base">
+                        {user.fullname || "your name"}
+                      </h1>
                       <p className="text-xs sm:text-sm">
-                        Lorem ipsum dolor sit amet.
+                       {user.description || "description not add"}
                       </p>
                     </div>
                   </div>
-                  <div className="mt-4">
-                    <div className="flex gap-2 sm:gap-4 items-center">
-                      <User2 className="w-4 h-4 sm:w-5 sm:h-5" />
-                      <Button variant="link" className="text-sm sm:text-base">
-                        <Link to={"/profile/update"}> View Profile</Link>
-                      </Button>
-                    </div>
+                  {user && user.role === "recruiter" ? (
+                    <>
+                      <div className="flex gap-2 sm:gap-4 items-center mt-2">
+                        <LogOut className="w-4 h-4 sm:w-5 sm:h-5" />
+                        <Button
+                          variant="link"
+                          className="text-sm sm:text-base"
+                          onClick={handleLogout}
+                        >
+                          Logout
+                        </Button>
+                      </div>
+                    </>
+                  ) : (
+                    <div className="mt-4">
+                      <div className="flex gap-2 sm:gap-4 items-center">
+                        <User2 className="w-4 h-4 sm:w-5 sm:h-5" />
+                        <Button variant="link" className="text-sm sm:text-base">
+                          <Link to={"/profile/update"}> View Profile</Link>
+                        </Button>
+                      </div>
 
-                    <div className="flex gap-2 sm:gap-4 items-center mt-2">
-                      <LogOut className="w-4 h-4 sm:w-5 sm:h-5" />
-                      <Button
-                        variant="link"
-                        className="text-sm sm:text-base"
-                        onClick={handleLogout}
-                      >
-                        Logout
-                      </Button>
+                      <div className="flex gap-2 sm:gap-4 items-center mt-2">
+                        <LogOut className="w-4 h-4 sm:w-5 sm:h-5" />
+                        <Button
+                          variant="link"
+                          className="text-sm sm:text-base"
+                          onClick={handleLogout}
+                        >
+                          Logout
+                        </Button>
+                      </div>
                     </div>
-                  </div>
+                  )}
                 </PopoverContent>
               </Popover>
             </div>
