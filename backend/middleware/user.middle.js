@@ -3,13 +3,15 @@ import jwt from "jsonwebtoken";
 const CheckAuth = async (req, res, next) => {
   try {
     const token = req.cookies.token;
-    // console.log("i am token ", token);
+    
     if (!token) {
       return res.status(403).json({
-        message: "Access denied. No token provided.",
+        message: "Access denied, please log in again.",
         success: false,
+        redirect: true, 
       });
     }
+
 
     const verify = jwt.verify(token, process.env.SECRET_KEY_TOKEN);
 
@@ -19,6 +21,7 @@ const CheckAuth = async (req, res, next) => {
         success: false,
       });
     }
+
     req.id = verify.userId;
     next();
   } catch (error) {

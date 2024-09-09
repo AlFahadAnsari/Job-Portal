@@ -6,7 +6,9 @@ import Job from "./components/MultiJob";
 import BrowseJobs from "./components/BrowseJobs";
 import Profile from "./components/Profile";
 import JobDiscription from "./components/JobDiscription";
-import Companies from "./components/Companies";
+import Companies from "./admin/Companies";
+import CompaniesCreate from "./admin/CompaniesCreate";
+import CompanyById from "./admin/CompanyById";
 
 function App() {
   const appRouter = createBrowserRouter([
@@ -42,8 +44,17 @@ function App() {
     //  admin auth
 
     {
-      path: "/companies",
+      path: "/admin/companies",
       element: <Companies />,
+    },
+    {
+      path: "/admin/companies/create",
+      element: <CompaniesCreate />,
+    },
+
+    {
+      path: "/admin/companies/:id",
+      element: <CompanyById />,
     },
   ]);
 
