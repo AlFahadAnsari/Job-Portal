@@ -69,7 +69,7 @@ const Navbar = () => {
                   <Link to={"/admin/companies"}>Companies</Link>
                 </li>
                 <li>
-                  <Link to={"/jobs"}>Jobs</Link>
+                  <Link to={"/admin/companies/jobs"}>Jobs</Link>
                 </li>
               </>
             ) : ( 

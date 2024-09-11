@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import Navbar from "@/shared/Navbar";
-import { ArrowLeftSquare } from "lucide-react";
+import { ArrowLeftSquare, Loader2 } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useForm, SubmitHandler } from "react-hook-form";
 import axios from "axios";
@@ -10,9 +10,8 @@ import { BASE_URL } from "@/components/constant";
 import toast from "react-hot-toast";
 import { RootState } from "@/redux/store";
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { SetSingleCompany } from "@/redux/companySlice";
-
 
 type Inputs = {
   companyName: string;
@@ -23,21 +22,19 @@ type Inputs = {
 };
 
 const CompanyById = () => {
+  const [loading, setLoading] = useState(false);
+
   const { singleCompany } = useSelector((state: RootState) => state.company);
   const param = useParams();
   const navi = useNavigate();
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const { register, handleSubmit, reset, setValue } = useForm<Inputs>();
-
 
   const GetAllComapny = async () => {
     try {
-      const res = await axios.get(
-        BASE_URL + `/api/comapny/get/${param?.id}`,
-        {
-          withCredentials: true,
-        }
-      );
+      const res = await axios.get(BASE_URL + `/api/comapny/get/${param?.id}`, {
+        withCredentials: true,
+      });
       if (res.status === 200) {
         dispatch(SetSingleCompany(res.data.findComanyId));
       }
@@ -51,9 +48,9 @@ const CompanyById = () => {
     }
   };
 
-  useEffect(()=>{
-    GetAllComapny()
-  },[param,dispatch])
+  useEffect(() => {
+    GetAllComapny();
+  }, [param, dispatch]);
 
   useEffect(() => {
     setValue("companyName", singleCompany?.name || "");
@@ -73,7 +70,7 @@ const CompanyById = () => {
     if (data.logo.length > 0) {
       formData.append("logo", data.logo[0]);
     }
-
+    setLoading(true)
     try {
       const res = await axios.put(
         BASE_URL + `/api/comapny/update/${param?.id}`,
@@ -98,6 +95,8 @@ const CompanyById = () => {
       } else {
         toast.error("An error occurred");
       }
+    }finally{
+      setLoading(false)
     }
   };
 
@@ -178,12 +177,24 @@ const CompanyById = () => {
             </div>
           </div>
 
-          <Button
-            type="submit"
-            className="bg-black text-white hover:bg-black hover:text-white w-full mt-10"
-          >
-            Add
-          </Button>
+        
+
+          {loading ? (
+                 <Button
+                 type="submit"
+                 className="bg-black text-white hover:bg-black hover:text-white w-full mt-10"
+               >
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Please wait
+                </Button>
+              ) : (
+                <Button
+                type="submit"
+                className="bg-black text-white hover:bg-black hover:text-white w-full mt-10"
+              >
+                Update
+              </Button>
+              )}
         </form>
       </div>
     </div>
