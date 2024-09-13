@@ -12,6 +12,8 @@ import { useSelector } from "react-redux";
 import { RootState } from "@/redux/store";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Edit2, Eye, MoreHorizontal } from "lucide-react";
 
 interface Job {
   company: any;
@@ -62,14 +64,21 @@ const AdminJobTable: React.FC = () => {
                     <TableCell>{job?.company?.name}</TableCell>
                     <TableCell>{job?.title}</TableCell>
                     <TableCell>{job?.createdAt.split("T")[0]}</TableCell>
-                    <TableCell className="text-start">
-                      <button
-                        className="text-blue-600"
-                        onClick={() => navi(`/admin/companies/${job?._id}`)}
-                      >
-                        Edit
-                      </button>
-                    </TableCell>
+                    <TableCell className="text-start cursor-pointer">
+                                    <Popover>
+                                        <PopoverTrigger><MoreHorizontal /></PopoverTrigger>
+                                        <PopoverContent className="w-32">
+                                            <div onClick={()=> navi(`/admin/companies/${job._id}`)} className='flex items-center gap-2 w-fit cursor-pointer'>
+                                                <Edit2 className='w-4' />
+                                                <span>Edit</span>
+                                            </div>
+                                            <div onClick={()=> navi(`/admin/jobs/${job._id}/applicants`)} className='flex items-center w-fit gap-2 cursor-pointer mt-2'>
+                                                <Eye className='w-4'/>
+                                                <span>Applicants</span>
+                                            </div>
+                                        </PopoverContent>
+                                    </Popover>
+                                </TableCell>
                   </TableRow>
                 );
               })

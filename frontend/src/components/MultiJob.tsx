@@ -20,7 +20,7 @@ const Job = () => {
   const { getAllJob } = useSelector((state: RootState) => state.job);
 
   return (
-    <div>
+    <div className="p-7">
       <Navbar />
       <div className="max-w-7xl mx-auto mt-5">
         <div className="flex gap-5">

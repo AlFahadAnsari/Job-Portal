@@ -23,6 +23,7 @@ interface Job {
   company: {
     name: string;
   };
+
 }
 
 interface JobState {
@@ -74,7 +75,7 @@ const JobDescription: React.FC = () => {
         BASE_URL + `/api/application/applyjob/${jobId}`,
         { withCredentials: true }
       );
-      if (res.data === 201) {
+      if (res.status === 201) {
         toast.success(res.data.message);
       }
     } catch (error) {
@@ -89,7 +90,7 @@ const JobDescription: React.FC = () => {
   };
 
   return (
-    <div className="max-w-7xl mx-auto bg-white mt-5  p-10 md:p-0">
+    <div className="max-w-7xl mx-auto bg-white mt-5  p-10 md:p-5">
       <h1 className="font-bold text-xl capitalize ">{singleJob?.title || "Job Title"}</h1>
       <div className="flex items-center gap-2 mt-4">
         <Badge className="text-blue-500 font-bold text-sm border border-slate-200">
