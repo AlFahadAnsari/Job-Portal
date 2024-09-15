@@ -4,7 +4,7 @@ const applicationSChema = new mongoose.Schema(
   {
     job: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Job",
+      ref: "Jobs",
       require: true,
     },
     applicant: {
@@ -14,7 +14,7 @@ const applicationSChema = new mongoose.Schema(
     },
     status: {
       type: String,
-      enum: ["pending", "accept", "reject"],
+      enum: ["pending", "accepted", "rejected"],
       default: "pending",
     },
   },

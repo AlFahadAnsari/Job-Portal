@@ -60,8 +60,8 @@ export const ApplyJob = async (req, res) => {
 
 export const getApplyJobs = async (req, res) => {
   try {
+    
     const userId = req.id;
-
     const appliedJobs = await Application.find({ applicant: userId })
       .sort({ createdAt: -1 })
       .populate({
@@ -79,7 +79,7 @@ export const getApplyJobs = async (req, res) => {
 
     return res.status(200).json({
       message: "Jobs retrieved successfully",
-      jobs: appliedJobs,
+      appliedJobs
     });
   } catch (error) {
     console.log(error);
@@ -89,7 +89,7 @@ export const getApplyJobs = async (req, res) => {
   }
 };
 
-export const appliyListByAdmin = async (req, res) => {
+export const getApplicants = async (req, res) => {
   try {
     const jobId = req.params.id;
     const job = await Jobs.findById(jobId).populate({
@@ -110,6 +110,7 @@ export const appliyListByAdmin = async (req, res) => {
     }
 
     return res.status(200).json({
+      job,
       message: "successfull get",
     });
   } catch (error) {
@@ -137,13 +138,12 @@ export const JobStatus = async (req, res) => {
       });
     }
 
-    findOutApplication.status = status.toLowerCase()
-    await findOutApplication.save()
+    findOutApplication.status = status.toLowerCase();
+    await findOutApplication.save();
 
     return res.status(200).json({
-      message:"success"
-    })
-    
+      message: "Status updated successfully.",
+    });
   } catch (error) {
     console.log(error);
   }

@@ -7,6 +7,7 @@ import AppliedJobs from "./AppliedJobsTable";
 import { useState } from "react";
 import EditProfile from "./EditProfile";
 import { useSelector } from "react-redux";
+import useGetAppliedJob from "./hooks/useGetAppliedJob";
 
 // const Skils = ["Html", "Css", "Javascript", "ReactJs"];
 const resume = true;
@@ -15,6 +16,7 @@ const Profile = () => {
   const [open, setOpen] = useState<boolean>(false);
   const { user } = useSelector((store) => store.auth);
 
+  useGetAppliedJob();
   return (
     <div>
       <div>
@@ -67,7 +69,7 @@ const Profile = () => {
               {user?.profile?.skills.length == 0 ? (
                 <span className="font-bold">Na</span>
               ) : (
-                user?.profile?.skills.map((i:any, index:number) => {
+                user?.profile?.skills.map((i: any, index: number) => {
                   return (
                     <Badge
                       key={index}
@@ -103,7 +105,7 @@ const Profile = () => {
       {/*  apply jobs */}
 
       <div className="max-w-7xl mx-auto">
-        <h1 className="font-bold mt-5">Applied Jobs</h1>
+        <h1 className="font-bold mt-5 p-5">Applied Jobs</h1>
 
         <div>
           <AppliedJobs />
