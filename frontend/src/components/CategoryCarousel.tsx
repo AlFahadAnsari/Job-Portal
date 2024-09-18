@@ -1,3 +1,4 @@
+import { setSearchHome } from "@/redux/jobSlice";
 import { Button } from "./ui/button";
 import {
   Carousel,
@@ -6,14 +7,23 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "./ui/carousel";
+import { useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 const CategoryCarousel = () => {
+  const dispatch = useDispatch();
+  const navi = useNavigate();
   const Category = [
     "Front-end developer",
     "Back-end developer",
     "Graphic Designer",
     "Full stack developer",
   ];
+
+  const handleSearch = (searchQuery) => {
+    dispatch(setSearchHome(searchQuery));
+    navi("/browsejob");
+  };
 
   return (
     <div>
@@ -26,7 +36,8 @@ const CategoryCarousel = () => {
             >
               <Button
                 variant="outline"
-                className="min-w-fit sm:w-auto bg-[#6a38c2] text-white rounded-full"
+                className="min-w-fit sm:w-auto bg-[#6a38c2] text-white rounded-full hover:text-black"
+                onClick={()=>handleSearch(item)}
               >
                 {item}
               </Button>

@@ -12,6 +12,7 @@ import CompanyById from "./admin/CompanyById";
 import AdminJob from "./admin/AdminJob";
 import PostAdminJob from "./admin/PostAdminJob";
 import Applicants from "./admin/Applicants";
+import Protected from "./admin/Protected";
 
 function App() {
   const appRouter = createBrowserRouter([
@@ -48,28 +49,52 @@ function App() {
 
     {
       path: "/admin/companies",
-      element: <Companies />,
+      element: (
+        <Protected>
+          <Companies />
+        </Protected>
+      ),
     },
     {
       path: "/admin/companies/create",
-      element: <CompaniesCreate />,
+      element: (
+        <Protected>
+          <CompaniesCreate />,
+        </Protected>
+      ),
     },
 
     {
       path: "/admin/companies/:id",
-      element: <CompanyById />,
+      element: (
+        <Protected>
+          <CompanyById />,
+        </Protected>
+      ),
     },
     {
       path: "/admin/companies/jobs",
-      element: <AdminJob />,
+      element: (
+        <Protected>
+          <AdminJob />,
+        </Protected>
+      ),
     },
     {
       path: "/admin/jobs/create",
-      element: <PostAdminJob />,
+      element: (
+        <Protected>
+          <PostAdminJob />,
+        </Protected>
+      ),
     },
     {
-      path:"/admin/jobs/:id/applicants",
-      element:<Applicants/>
+      path: "/admin/jobs/:id/applicants",
+      element: (
+        <Protected>
+          <Applicants />,
+        </Protected>
+      ),
     },
   ]);
 
